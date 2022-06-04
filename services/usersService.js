@@ -1,0 +1,57 @@
+const UserModel = require("./../models/userModel");
+const responseOk = require('../utils/responseOk');
+const responseError = require('../utils/responseError');
+const User = require("./../models/userModel");
+
+const register = async (userData) => {
+    try {
+        if (await validateEmail(userData.email)) {
+            return responseError(400, 'email is alredy used');
+        }
+        const user = new UserModel(userData);
+        await user.save();
+        return responseOk({ user });
+    } catch (error) {
+        console.log(error);
+        return responseError(500, 'ocurrio un error');
+    }
+};
+
+const validateEmail = async (email) => {
+    try {
+        const checkEmail = await UserModel.findOne({ email: email })
+        return checkEmail ? true : false;
+    } catch (error) {
+        return responseError(500, 'ocurrio un error');
+    }
+}
+
+const auth = async (email, password) => {
+    try {
+        const user = await UserModel.findOne({ email: email, password: password });
+        if (user) {
+            return responseOk({ token: 'dsddzvgzghaka', user });
+        }
+        return responseError(401, 'usuario no autenticado');
+    } catch (error) {
+        return responseError(500, 'ocurrio un error');
+    }
+};
+
+const infoUser = async (id) => {
+    try {
+        const user = await UserModel.findById(id);
+        if (user) {
+            return responseOk({ user });
+        }
+        return responseError(404, 'usuario no encontrado');
+    } catch (error) {
+        return responseError(500, 'ocurrio un error');
+    }
+}
+
+module.exports = {
+    auth,
+    register,
+    infoUser
+}
