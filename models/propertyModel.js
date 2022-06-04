@@ -16,7 +16,8 @@ const PropertySchema = new Schema(
         },
         value: Number,
         shortDescription: String,
-        description: String
+        description: String,
+        status: Number
     },
     {
         timestamps: true

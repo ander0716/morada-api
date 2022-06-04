@@ -6,9 +6,9 @@ app.use(express.urlencoded({ extended: false }))//resuelve caracteres especiales
 const port = 3001;
 
 const usersRoutes = require('./routes/users');
-const propertyRoutes = require('./routes/properties');
+const propertiesRoutes = require('./routes/properties');
 app.use('/users', usersRoutes);
-app.use('/property', propertyRoutes);
+app.use('/properties', propertiesRoutes);
 
 app.listen(port, () => {
     console.log('server running');
