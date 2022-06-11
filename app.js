@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mongo = require('./connection/mongoconn');
+require('dotenv').config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))//resuelve caracteres especiales en las urls
 const port = 3001;

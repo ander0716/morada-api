@@ -39,7 +39,7 @@ const auth = async (email, password) => {
                     id: user._id,
                     role: user.role
                 };
-                const token = jwt.sign(payload, 'millavesecreta')
+                const token = jwt.sign(payload, process.env.JWT_SECRET)
                 return responseOk({ token, role: user.role });
             }
         }
