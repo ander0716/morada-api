@@ -1,13 +1,16 @@
 const UserModel = require("./../models/userModel");
 const responseOk = require('../utils/responseOk');
 const responseError = require('../utils/responseError');
-const User = require("./../models/userModel");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const register = async (userData) => {
     try {
         if (await validateEmail(userData.email)) {
             return responseError(400, 'email is alredy used');
         }
+        const passwordEncrypted = await bcrypt.hash(userData.password, 11);
+        userData.password = passwordEncrypted;
         const user = new UserModel(userData);
         await user.save();
         return responseOk({ user });
@@ -28,9 +31,17 @@ const validateEmail = async (email) => {
 
 const auth = async (email, password) => {
     try {
-        const user = await UserModel.findOne({ email: email, password: password });
+        const user = await UserModel.findOne({ email: email });
         if (user) {
-            return responseOk({ token: 'dsddzvgzghaka', user });
+            const match = await bcrypt.compare(password, user.password);
+            if (match) {
+                const payload = {
+                    id: user._id,
+                    role: user.role
+                };
+                const token = jwt.sign(payload, 'millavesecreta')
+                return responseOk({ token, role: user.role });
+            }
         }
         return responseError(401, 'usuario no autenticado');
     } catch (error) {

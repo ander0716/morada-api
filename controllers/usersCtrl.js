@@ -13,7 +13,7 @@ const login = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         // const { id } = req.body; // const id = req.body.id
-        const { statusHttp, response } = await infoUser(req.query.id);
+        const { statusHttp, response } = await infoUser(req.payload.id);
         res.status(statusHttp).json({ response });
     } catch (error) {
         res.status(500).send(error);
