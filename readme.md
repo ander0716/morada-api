@@ -3,6 +3,7 @@
 ## Modules
 - Usuarios
 - Propiedades
+- Favoritos
 
 ## API Reference
 
