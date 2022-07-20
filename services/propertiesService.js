@@ -33,7 +33,10 @@ const buildQueryFilter = (filter) => {
 
 const getProperty = async (id) => {
     try {
-        const property = await PropertyModel.findById(id);
+        const property = await PropertyModel
+                        .findById(id)
+                        .populate('ownerId','name email phone')//ownerId es la clave para la relación.
+                        .exec();
         if (property) {
         return responseOk({ property });
         }
